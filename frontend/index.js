@@ -2,9 +2,16 @@ function moduleProject3() {
 
   // 👉 TASK 1 - Write a `buildNav` component that returns a nav
 
-  function buildNav(links) {
-    //  ✨ do your magic here
-    return document.createElement('nav')
+  function buildNav(link) {
+    const container = document.createElement('nav')
+    link.forEach(item => {
+      const navLinks = document.createElement("a")
+      navLinks.href = item.href
+      navLinks.textContent = item.textContent
+      navLinks.title = item.title
+      container.append(navLinks)
+    })
+    return container
   }
 
   // ❗ DOM creation using your `buildNav` component (do not change):
@@ -20,6 +27,31 @@ function moduleProject3() {
 
   function buildLearnerCard(learner, languages) {
     //  ✨ do your magic here
+    const card = document.createElement("div")
+    card.classList.add("learner-card")
+
+    const userID = document.createElement("p")
+    userID.textContent = `Learner ID: ${learner.id}`
+    const nameL = document.createElement("p")
+    nameL.textContent = learner.fullName
+    const dobL = document.createElement("p")
+    dobL.textContent = `Date of Birth: ${learner.dateOfBirth}`
+    const FavLangunage = document.createElement("p")
+    const favLan = languages.find(lang => lang.id === learner.favLanguage)
+    FavLangunage.textContent = `Favorite Language: ${favLan.name}`;
+
+    [nameL,userID, dobL, FavLangunage].forEach(item => {
+      card.append(item)
+    })
+
+    card.addEventListener("click",()=>{
+      document.querySelectorAll(".learner-card").forEach(card =>{
+        card.classList.remove("active")
+      })
+      card.classList.add("active")
+    })
+
+    return card
   }
 
   {
@@ -40,13 +72,45 @@ function moduleProject3() {
       { id: 17, fullName: 'Daniel Castillo', dateOfBirth: '1995-11-05', favLanguage: 12 }
     ]
     //  ✨ do your magic here
+    learners.forEach(learner => {
+      const learnerCard = buildLearnerCard(learner, languages)
+      document.querySelector("section").append(learnerCard)
+    })
   }
 
   // 👉 TASK 3 - Write a `buildFooter` component that returns a footer
 
   function buildFooter(footerData) {
-    //  ✨ do your magic here
-    return document.createElement('footer')
+    const footer = document.createElement('footer')
+    const contactDiv = document.createElement("div")
+    contactDiv.className = "company-info"
+    const companyName = document.createElement("p")
+    companyName.textContent = footerData.companyName
+    const companyAdress = document.createElement("p")
+    companyAdress.textContent = footerData.address
+    const companyMailText = document.createElement("p")
+    companyMailText.innerHTML = `Email: <a href="mailto:example.com">${footerData.contactEmail}`
+    contactDiv.append(companyName)
+    contactDiv.append(companyAdress)
+    contactDiv.append(companyMailText)
+
+
+    const socialMedia = document.createElement("div")
+    socialMedia.className = "social-media"
+
+    for (let platform in footerData.socialMedia) {
+      const anchorTags = document.createElement("a")
+      anchorTags.href = footerData.socialMedia[platform]
+      anchorTags.textContent = platform.charAt(0).toUpperCase() + platform.slice(1)
+      socialMedia.append(anchorTags)
+    }
+    const tagLine = document.createElement("div")
+    const date = new Date()
+    tagLine.textContent = `© ${footerData.companyName.toUpperCase()} ${date.getFullYear()}`
+    footer.append(contactDiv)
+    footer.append(socialMedia)
+    footer.append(tagLine)
+    return footer
   }
 
   // ❗ DOM creation using your `buildFooter` component (do not change):
@@ -62,8 +126,17 @@ function moduleProject3() {
   }))
 
   // 👉 TASK 4 - Clicking on the section should deactivate the active card
-
+  document.addEventListener("click",evt=>{
+    if(evt.target === document.querySelector("section"))
+      {
+        const learner = document.querySelectorAll(".learner-card")
+        learner.forEach(card =>{
+          card.classList.remove("active")
+        })
+      }
+  })
   //  ✨ do your magic here
+
 }
 
 // ❗ DO NOT CHANGE THIS CODE
